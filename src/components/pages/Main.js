@@ -1,10 +1,27 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Footer from '../globals/Footer'
 import { Link } from 'react-router-dom'
 import FoundItems from './main-components/FoundItems'
-
+import bigData from '../../data/mock-data.json'
 function Main() {
   const dataToPass = { name: 'John Doe', age: 25 };
+
+  useEffect(() => {
+    const foundCols = bigData.cols;
+    const foundItems = bigData.data.slice(0, 5);
+    console.log(foundItems, " data from main");
+    console.log(foundCols, " cols from main");
+    const mappedData = foundItems.map((item, i) => {
+      let obj = {};
+      foundCols.forEach((col, coli) => obj[col] = item[coli]);
+      return obj;
+    })
+
+    console.log(mappedData, " mappedObj");
+  }, [])
+
+
+
   return (
     <div id='main-page-holder'>
       <div className='container-fluid p-5'>
@@ -40,7 +57,7 @@ function Main() {
                 <FoundItems title="Test" smallTitle="testsetetst" />
                 <FoundItems title="Test" smallTitle="testsetetst" />
                 <FoundItems title="Test" smallTitle="testsetetst" />
-                <Link to="/searchresults" state={{name:"hohn", surName:"doe"}} className="more-result">Show More...</Link>
+                <Link to="/searchresults" state={{ name: "hohn", surName: "doe" }} className="more-result">Show More...</Link>
               </div>
             </div>
 

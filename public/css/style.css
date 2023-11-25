@@ -115,22 +115,52 @@ html {
 #search-results-page-holder .search-result-item {
     padding: 1rem;
     font-size: 1.4rem;
+    cursor: pointer;
 }
 
-#search-results-page-holder .search-result-item i{
- 
+#search-results-page-holder .search-result-item i {
+
     font-size: 2.4rem;
     margin-right: 1rem;
 }
-#search-results-page-holder .search-result-item  .found-item-mini{
+
+#search-results-page-holder .search-result-item .found-item-mini {
     color: rgb(160, 160, 160);
 }
-#search-results-page-holder .search-result-item  .found-item-title{
+
+#search-results-page-holder .search-result-item .found-item-title {
     font-weight: 500;
 }
+
 #search-results-page-holder .search-result-item:hover {
-   background-color: rgb(216,224,240);
-   border-radius: 1rem;
+    background-color: rgb(216, 224, 240);
+    border-radius: 1rem;
+}
+
+#search-results-page-holder .results-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    width: 90%;
+
+    margin: 2rem 0;
+    font-size: 1.6rem;
+}
+
+#search-results-page-holder .results-pagination a {
+    border: .1rem solid rgb(163, 163, 163);
+    padding: .2rem 1rem;
+    border-radius: .3rem;
+    cursor: pointer;
+}
+.current-page{
+    background-color: rgb(32,64,128);
+    color: white;
+}
+.page-seperator{
+    font-size: 2rem;
+    letter-spacing: .5rem;
+    font-weight: 700;
 }
 .btn-link {
     border: none;
