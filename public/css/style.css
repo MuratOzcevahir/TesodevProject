@@ -153,15 +153,82 @@ html {
     border-radius: .3rem;
     cursor: pointer;
 }
-.current-page{
-    background-color: rgb(32,64,128);
-    color: white;
+
+#add-link-page-holder {
+    font-size: 1.6rem;
 }
-.page-seperator{
+
+#add-link-page-holder .form-group {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 1.4rem 0;
+    position: relative;
+
+}
+
+#add-link-page-holder .form-group label {
+    font-weight: 600;
+    font-size: 1.8rem;
+    margin-bottom: .3rem;
+}
+
+#add-link-page-holder .form-group span {
+    color: red;
+    font-size: 1.4rem;
+    position: absolute;
+    line-height: 0;
+    bottom: 0;
+}
+
+#add-link-page-holder .form-group input {
+    font-size: 1.6rem;
+    box-sizing: content-box;
+    padding: .5rem 1rem;
+    border-radius: .5rem;
+    height: 3rem;
+    border: 1px solid rgb(170, 170, 170);
+}
+
+#add-link-page-holder .form-group input::placeholder {
+    color: rgb(167, 167, 167);
+    font-weight: 500;
+
+}
+
+#add-link-page-holder .form-group input:focus {
+    outline: none;
+}
+
+#add-link-page-holder .form-error label {
+    color: red;
+}
+
+#add-link-page-holder .form-error input {
+    border-color: red;
+    color: red;
+}
+
+#add-link-page-holder button {
+    width: 25%;
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.current-page {
+    background-color: rgb(32, 64, 128);
+    color: white;
+    pointer-events: none;
+}
+
+.page-seperator {
     font-size: 2rem;
     letter-spacing: .5rem;
     font-weight: 700;
 }
+
 .btn-link {
     border: none;
     color: white !important;
@@ -169,11 +236,36 @@ html {
     background-color: rgb(32, 64, 128);
     padding: .7rem 3rem;
     font-weight: 600;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: 0.2s;
+}
+
+.btn-link-disabled {
+    border: none;
+    color: rgb(123, 123, 123) !important;
+    background-color: rgb(172, 177, 186);
+    padding: .7rem 3rem;
+    text-shadow: 0 0 2px rgb(96, 96, 96);
+    pointer-events: none;
     border-radius: 10px;
 }
 
 .btn-link:hover {
     background-color: rgb(101, 127, 181);
+}
+
+.back-to-list {
+    display: flex;
+    color: black;
+    font-size: 3.4rem;
+    align-items: center;
+    gap: .5rem;
+    font-weight: 600;
+}
+
+.back-to-list i {
+    font-size: 3rem;
 }
 
 #main-footer {

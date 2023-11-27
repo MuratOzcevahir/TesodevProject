@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Footer from '../globals/Footer'
 import { Link } from 'react-router-dom'
 import FoundItems from './main-components/FoundItems'
@@ -6,20 +6,34 @@ import bigData from '../../data/mock-data.json'
 function Main() {
   const dataToPass = { name: 'John Doe', age: 25 };
 
+  const [searchInputText, setsearchInputText] = useState("");
+  const [foundData, setfoundData] = useState([])
+  const inputRef = useRef();
   useEffect(() => {
+
+
+  }, [])
+  const SearchItems = () => {
+    console.log(inputRef.current.value)
+    let searched = inputRef.current.value
+    setsearchInputText(searched)
+
     const foundCols = bigData.cols;
-    const foundItems = bigData.data.slice(0, 5);
+    const foundItems = (JSON.parse(localStorage.getItem("items"))).data;
+
     console.log(foundItems, " data from main");
     console.log(foundCols, " cols from main");
-    const mappedData = foundItems.map((item, i) => {
+
+
+    setfoundData(foundItems.map((item, i) => {
       let obj = {};
       foundCols.forEach((col, coli) => obj[col] = item[coli]);
       return obj;
-    })
+    }).filter((p) => { return p.nameSurname.includes(searched) }).slice(0, 3));
 
-    console.log(mappedData, " mappedObj");
-  }, [])
 
+    console.log(foundItems, "fom click")
+  }
 
 
   return (
@@ -46,18 +60,27 @@ function Main() {
                     <div className='search-icon'>
                       <i className="bi bi-search"></i>
                     </div>
-                    <input className='search-input' type="text" />
+                    <input className='search-input' type="text" ref={inputRef} />
                   </div>
-                  <button className='btn-link'>Search</button>
+                  <button className='btn-link' onClick={SearchItems}>Search</button>
                 </div>
               </div>
             </div>
             <div className='col-12 col-lg-6 m-auto'>
-              <div id='main-search-box'>
-                <FoundItems title="Test" smallTitle="testsetetst" />
-                <FoundItems title="Test" smallTitle="testsetetst" />
-                <FoundItems title="Test" smallTitle="testsetetst" />
-                <Link to="/searchresults" state={{ name: "hohn", surName: "doe" }} className="more-result">Show More...</Link>
+              <div id='main-search-box' className={searchInputText == '' ? 'd-none' : ''}>
+                {
+                  foundData.map((item, i) =>
+
+
+                    <FoundItems key={i} title={i} smallTitle={i} />
+
+
+
+                  )
+                }
+
+                <Link to="/searchresults" state={{ searchTextFromMain: searchInputText }} className="more-result">Show More...</Link>
+
               </div>
             </div>
 
