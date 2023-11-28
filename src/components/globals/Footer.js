@@ -4,9 +4,9 @@ function Footer() {
     return (
         <div id='main-footer'>
             <div className='container-fluid p-2 p-lg-5'>
-                <div className='row'>
+                <div className='row m-0 p-0'>
                     <div className='col-12 col-lg-7'>
-                        <div className='d-flex align-items-center justify-content-center h-100 gap-3 '>
+                        <div className='d-flex flex-column flex-lg-row  align-items-center justify-content-center h-100 gap-3 '>
                             <div>
                                 <img src="https://www.tesodev.com/getimg/5c9b3f3ea80e95155c456632/340" />
                             </div>

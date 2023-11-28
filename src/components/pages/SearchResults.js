@@ -7,8 +7,7 @@ function SearchResults() {
     const location = useLocation();
     const navigate = useNavigate();
     let foundData = location.state;
-    foundData = location.state != null ? foundData.searchTextFromMain : '';
-    console.log(location.state, " location state")
+    foundData = location.state != null ? foundData.searchTextFromMain.toLowerCase() : '';
     let searchValue = createRef();
     let nextPage = []
     let previousPage = []
@@ -24,7 +23,8 @@ function SearchResults() {
     const [searchText, setsearchText] = useState(foundData);
     const [filterStyle, setfilterStyle] = useState("");
     useEffect(() => {
-        console.log(filterStyle, " fiteer")
+        if (localStorage.getItem("items") == null) localStorage.setItem("items", JSON.stringify(bigData))
+
 
         const fromLocalStorage = JSON.parse(localStorage.getItem("items"));
         const foundCols = fromLocalStorage.cols;
@@ -35,13 +35,11 @@ function SearchResults() {
             foundCols.forEach((col, coli) => obj[col] = item[coli]);
             return obj;
         }))
-        settotalItemAmount(foundItems.length)
+        settotalItemAmount(location.state != null ? location.state.itemAmount : foundItems.length)
     }, [])
     useEffect(() => {
-        console.log(totalItemAmount, " from totalItemAmountchange")
         let addPage = currentPage > 2 ? 4 : 1
         //######## NEED FIX  IMPORTANT(dont forget)
-        console.log(nextPage, " next page after effec")
         if (currentPage < totalItemAmount / nextSlice) {
             for (let i = 0; i <= 2; i++) {
                 nextPage.push(currentPage + addPage + i)
@@ -50,7 +48,6 @@ function SearchResults() {
         }
 
 
-        console.log(nextPage, "nexpage")
         if (currentPage !== 1) {
             for (let i = 1; i >= 0; i--) {
                 if ((currentPage - 1 - i) > 0)
@@ -63,13 +60,9 @@ function SearchResults() {
 
     }, [currentPage, mappedData, totalItemAmount])
     const SetFilterStyleHandler = (value) => {
-        console.log(value, "value")
         setfilterStyle(value)
     }
     useEffect(() => {
-        console.log(filterStyle)
-        console.log("çalıştı filtermap")
-        console.log(mappedData.length)
         if (filterStyle != "") {
             setmappedData(mappedData.sort(SortDataHandler))
         }
@@ -119,17 +112,19 @@ function SearchResults() {
         }
     }
     const SearchButtonHandler = () => {
-        setsearchText(searchValue.current.value)
+        let searched = searchValue.current.value.toLowerCase()
+
+        setsearchText(searched)
+
         setcurrentPage(1);
         setcurrentSlice(0, nextSlice);
         navigate(location.pathname, "");
 
-        settotalItemAmount(mappedData.filter((p) => { return p.nameSurname.includes(searchValue.current.value) || p.date.includes(searchValue.current.value) }).length);
+        settotalItemAmount(mappedData.filter((p) => { return p.nameSurname.toLowerCase().includes(searched) || p.date.toLowerCase().includes(searched) }).length);
     }
 
     const FilterHandler = (item) => {
 
-        console.log("filter çalıştı")
         //not dynamic search
         // if (item["nameSurname"].includes(searchText) || item["date"].includes(searchText)) {
         //     console.log(item, " found array")
@@ -137,7 +132,10 @@ function SearchResults() {
         // }
 
         //Few props dont forget
-        return item["nameSurname"].includes(searchText) || item["date"].includes(searchText);
+
+
+        return item["nameSurname"].toLowerCase().includes(searchText)
+            || item["date"].toLowerCase().includes(searchText);
 
     }
     const NoFilter = () => {
@@ -147,14 +145,13 @@ function SearchResults() {
     return (
 
         <div id='search-results-page-holder'>
-
-            <div className='container-fluid p-5'>
-                <div className='row row-gap-5'>
-                    <div className='col-12 col-lg-2'>
-                        <img src="/img/logo.webp" width="200" />
+            <div className='container-fluid p-5 '>
+                <div className='row row-gap-5 m-0 p-0'>
+                    <div className='col-12 col-xl-2 p-0'>
+                        <Link to="/"><img src="/img/logo.webp" width="200" /></Link>
                     </div>
-                    <div className='col-12 col-lg-8 '>
-                        <div style={{ width: "90%" }} className='d-column d-lg-flex justify-content-between align-items-center h-100'>
+                    <div className='col-12 col-xl-8 '>
+                        <div className='search-holder d-column d-lg-flex justify-content-between align-items-center gap-3 h-100'>
                             <div className='position-relative w-100 '>
                                 <div className='search-icon'>
                                     <i className="bi bi-search"></i>
@@ -165,26 +162,34 @@ function SearchResults() {
                         </div>
                     </div>
 
-                    <div className='col-12 col-lg-2'>
+                    <div className='col-12 col-xl-2'>
                         <div className='h-100 d-flex align-items-center justify-content-center'>
                             <Link to='/addlink' className='btn-link'>Add new record</Link>
                         </div>
                     </div>
                 </div>
                 <div className='container d-flex justify-content-end w-75 mt-4'>
-                    <div className='show-hidden-menu  z-3'>
-                        <span className='search-filter'><i className="bi bi-shuffle"></i> Order by</span>
+                    <div className='show-hidden-menu'>
+                        <span className='search-filter'>
+                            <span className="material-symbols-outlined">
+                                swap_vert
+                            </span> 
+                            
+                            Order by</span>
+
                         <div className='hidden-filter-menu'>
                             <span onClick={() => { SetFilterStyleHandler("nameASC") }}> Name Ascending</span>
                             <span onClick={() => { SetFilterStyleHandler("nameDESC") }}>Name Descending</span>
                             <span onClick={() => { SetFilterStyleHandler("yearASC") }}>Year Ascending</span>
                             <span onClick={() => { SetFilterStyleHandler("yearDESC") }}>Year Descending</span>
                         </div>
+
+
                     </div>
                 </div>
                 <div className='row mt-5'>
                     <div className='col-12 col-lg-8 m-auto'>
-                        <div className='d-flex flex-column' style={{ width: "90%" }} >
+                        <div className='items-holder d-flex flex-column' >
                             {
                                 mappedData
                                     .sort(SortDataHandler)
@@ -195,7 +200,7 @@ function SearchResults() {
                                     )
                             }
                         </div>
-                        <div className='results-pagination'>
+                        <div className={totalItemAmount > 3 ? `results-pagination flex-sm-row` : `d-none`} >
                             <a style={{ pointerEvents: currentPage < 2 ? "none" : '' }} onClick={() => { PageHandler('p') }}> Previous</a>
                             {
                                 previousPages.map((p, i) => {
@@ -210,7 +215,7 @@ function SearchResults() {
                                 })
                             }
                             <a style={{ pointerEvents: currentPage >= (totalItemAmount / nextSlice) ? "none" : '' }} onClick={() => { PageHandler('n') }}> Next</a>
-                            {totalItemAmount}
+                            {Math.ceil(totalItemAmount / 5)}
 
                         </div>
                     </div>
