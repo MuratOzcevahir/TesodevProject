@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import FoundItem from './search-result-components/FoundItem';
 
 import bigData from '../../data/mock-data.json'
+import SearchInput from './search-components/SearchInput';
 function SearchResults() {
     const location = useLocation();
     const navigate = useNavigate();
@@ -11,6 +12,7 @@ function SearchResults() {
     let searchValue = createRef();
     let nextPage = []
     let previousPage = []
+
 
     let filteredData = []
     const [mappedData, setmappedData] = useState([]);
@@ -151,17 +153,17 @@ function SearchResults() {
                         <Link to="/"><img src="/img/logo.webp" width="200" /></Link>
                     </div>
                     <div className='col-12 col-xl-8 '>
-                        <div className='search-holder d-column d-lg-flex justify-content-between align-items-center gap-3 h-100'>
+                        <SearchInput SearchItems={SearchButtonHandler} inputRef={searchValue} />
+                        {/* <div className='search-holder d-column d-lg-flex justify-content-between align-items-center gap-3 h-100'>
                             <div className='position-relative w-100 '>
                                 <div className='search-icon'>
                                     <i className="bi bi-search"></i>
                                 </div>
-                                <input ref={searchValue} className='search-input' type="text" placeholder={searchText} />
+                                <input onKeyDown={e => e.key == 'Enter' ? SearchButtonHandler() : ''} ref={searchValue} className='search-input' type="text" placeholder={searchText} />
                             </div>
                             <button className='btn-link' onClick={SearchButtonHandler}>Search</button>
-                        </div>
+                        </div> */}
                     </div>
-
                     <div className='col-12 col-xl-2'>
                         <div className='h-100 d-flex align-items-center justify-content-center'>
                             <Link to='/addlink' className='btn-link'>Add new record</Link>
@@ -173,8 +175,8 @@ function SearchResults() {
                         <span className='search-filter'>
                             <span className="material-symbols-outlined">
                                 swap_vert
-                            </span> 
-                            
+                            </span>
+
                             Order by</span>
 
                         <div className='hidden-filter-menu'>
@@ -191,17 +193,20 @@ function SearchResults() {
                     <div className='col-12 col-lg-8 m-auto'>
                         <div className='items-holder d-flex flex-column' >
                             {
-                                mappedData
+                                totalItemAmount < 1 ? 'no data found, try another' : mappedData
                                     .sort(SortDataHandler)
                                     .filter(FilterHandler)
                                     .slice(currentSlice, currentSlice + nextSlice)
                                     .map((item, i) =>
                                         <FoundItem key={i} obj={item} />
                                     )
+
                             }
                         </div>
                         <div className={totalItemAmount > 3 ? `results-pagination flex-sm-row` : `d-none`} >
+                            {currentPage > 4 ? <a className='fs-6 text-dark' onClick={() => { PageHandler('d', 1) }}> {1}</a> : null}
                             <a style={{ pointerEvents: currentPage < 2 ? "none" : '' }} onClick={() => { PageHandler('p') }}> Previous</a>
+
                             {
                                 previousPages.map((p, i) => {
                                     return <a key={i} onClick={() => { PageHandler('d', p) }}> {p}</a>
@@ -215,7 +220,9 @@ function SearchResults() {
                                 })
                             }
                             <a style={{ pointerEvents: currentPage >= (totalItemAmount / nextSlice) ? "none" : '' }} onClick={() => { PageHandler('n') }}> Next</a>
-                            {Math.ceil(totalItemAmount / 5)}
+
+                            {currentPage >= Math.ceil(totalItemAmount / 5) ? '' : <a className='fs-6  text-dark' onClick={() => { PageHandler('d', Math.ceil(totalItemAmount / 5)) }}> {Math.ceil(totalItemAmount / 5)}</a>}
+
 
                         </div>
                     </div>

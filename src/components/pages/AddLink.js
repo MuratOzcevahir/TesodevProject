@@ -146,14 +146,14 @@ function AddLink() {
 
                                             <div className={errors.country && touched.country ? 'form-error form-group' : 'form-group'} >
                                                 <label  >Country</label>
-                                                <Field id="country" name="country" className={errors.country && touched.country ? 'form-error' : ''} />
+                                                <Field id="country" name="country" placeholder="Enter a country"  className={errors.country && touched.country ? 'form-error' : ''} />
                                                 {errors.country && touched.country ?
                                                     (<span>{errors.country}</span>)
                                                     : null}
                                             </div>
                                             <div className={errors.city && touched.City ? 'form-error form-group' : 'form-group'} >
                                                 <label >city</label>
-                                                <Field id="city" name="city" className={errors.city && touched.city ? 'form-error' : ''} />
+                                                <Field id="city" name="city" placeholder="Enter a city"  className={errors.city && touched.city ? 'form-error' : ''} />
                                                 {errors.city && touched.city ?
                                                     (<span>{errors.city}</span>)
                                                     : null}
@@ -162,7 +162,7 @@ function AddLink() {
 
                                             <div className={errors.email && touched.email ? 'form-error form-group' : 'form-group'} >
                                                 <label  >Email</label>
-                                                <Field id="email" name="email" className={errors.email && touched.email ? 'form-error' : ''} />
+                                                <Field id="email" name="email" placeholder="Enter an e-mail (abc@xyz.com)"  className={errors.email && touched.email ? 'form-error' : ''} />
                                                 {errors.email && touched.email ?
                                                     (<span>{errors.email}</span>)
                                                     : null}
@@ -170,7 +170,7 @@ function AddLink() {
 
                                             <div className={errors.website && touched.website ? 'form-error form-group' : 'form-group'} >
                                                 <label  >website</label>
-                                                <Field id="website" name="website" className={errors.website && touched.website ? 'form-error' : ''} />
+                                                <Field id="website" name="website" placeholder="Enter a website (https://xyz.com)"  className={errors.website && touched.website ? 'form-error' : ''} />
                                                 {errors.website && touched.website ?
                                                     (<span>{errors.website}</span>)
                                                     : null}

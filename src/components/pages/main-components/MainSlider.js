@@ -64,7 +64,7 @@ function MainSlider() {
                 {
                     sliderData.map((item, i) => {
                         return (
-                            <div className='slide-item'>
+                            <div key={i} className='slide-item'>
                                 <img src={item.img} alt="" />
                                 <h3> {item.title.length > 50 ? item.title.substring(0, 50) + '..' : item.title}</h3>
                                 <small> {item.desc}</small>

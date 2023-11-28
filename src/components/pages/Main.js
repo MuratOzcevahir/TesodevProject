@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import FoundItems from './main-components/FoundItems'
 import bigData from '../../data/mock-data.json'
 import MainSlider from './main-components/MainSlider'
+import SearchInput from './search-components/SearchInput'
 function Main() {
   const dataToPass = { name: 'John Doe', age: 25 };
 
@@ -62,7 +63,10 @@ function Main() {
             <div id='main-search-holder' className='col-12 col-lg-6 m-auto'>
               <div className='d-flex flex-column align-items-start '>
                 <span className='fw-bold fs-1'>Find in records</span>
-                <div className='d-flex align-items-center justify-content-between w-100 gap-3'>
+
+                <SearchInput SearchItems={SearchItems} inputRef={inputRef}/>
+
+                {/* <div className='search-holder d-column d-lg-flex justify-content-between align-items-center gap-3 h-100'>
                   <div className='position-relative w-100'>
                     <div className='search-icon'>
                       <i className="bi bi-search"></i>
@@ -70,9 +74,13 @@ function Main() {
                     <input onKeyDown={e => e.key == 'Enter' ? SearchItems() : ''} className='search-input' type="text" ref={inputRef} />
                   </div>
                   <button className='btn-link' onClick={SearchItems}>Search</button>
-                </div>
+                </div> */}
+
+
+
               </div>
             </div>
+            <i className="fa-solid fa-magnifying-glass"></i>
             <div className='col-12 col-lg-6 m-auto'>
               {
                 searchInputText != '' && foundData.length < 1 ? 'no data' : null
@@ -89,7 +97,7 @@ function Main() {
                   )
                 }
 
-                <Link to="/searchresults" state={{ searchTextFromMain: searchInputText, itemAmount: foundData.length }} className="more-result">Show More... '{foundData.length}'</Link>
+                <Link to="/searchresults" state={{ searchTextFromMain: searchInputText, itemAmount: foundData.length }} className={foundData.length < 4 ? 'd-none' : 'more-result'}  >Show More... '{foundData.length}'</Link>
 
               </div>
             </div>
