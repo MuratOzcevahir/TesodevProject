@@ -12,7 +12,7 @@ function FoundItem(obj) {
                     </div>
                     <div className='d-flex flex-column'>
                         <span className='found-item-title'>{item.country} {item.city}</span>
-                        <span className='found-item-mini'> {item.email} </span>
+                        <span className='found-item-mini'> {item.website} </span>
                     </div>
                 </div>
                 <div className='d-flex flex-column text-lg-end '>

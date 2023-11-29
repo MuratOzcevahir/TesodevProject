@@ -6,9 +6,10 @@ import bigData from '../../data/mock-data.json'
 import 'react-toastify/dist/ReactToastify.css';
 
 import { ToastContainer, toast } from 'react-toastify';
+import FormGroup from '../add-link-components/FormGroup';
 
 
-const SignupSchema = Yup.object().shape({
+const NewRecordSchema = Yup.object().shape({
     nameSurname: Yup.string()
         .matches(/^[a-zA-ZğüşöçıİĞÜŞÖÇ ]*$/, "Number is not allowed!")
         .min(2, 'at least 2 letters!')
@@ -111,7 +112,7 @@ function AddLink() {
         <div id='add-link-page-holder'>
             <div className='container-fluid p-5 pb-0'>
                 <div className='row row-gap-5'>
-                    <div className='col-12 col-lg-2'>
+                    <div className='col-12 col-xl-2'>
                         <Link to="/">
                             <img src="/img/logo.webp" width="200" />
                         </Link>
@@ -131,51 +132,16 @@ function AddLink() {
                                         email: '',
                                         website: ''
                                     }}
-                                    validationSchema={SignupSchema}
+                                    validationSchema={NewRecordSchema}
                                     onSubmit={(value) => { submitHandler(value) }}
                                 >
                                     {({ isValid, errors, touched }) => (
                                         <Form>
-                                            <div className={errors.nameSurname && touched.nameSurname ? 'form-error form-group' : 'form-group'} >
-                                                <label  >Name</label>
-                                                <Field id="nameSurname" name="nameSurname" placeholder="Enter name and surname" />
-                                                {errors.nameSurname && touched.nameSurname ?
-                                                    (<span>{errors.nameSurname}</span>)
-                                                    : null}
-                                            </div>
-
-                                            <div className={errors.country && touched.country ? 'form-error form-group' : 'form-group'} >
-                                                <label  >Country</label>
-                                                <Field id="country" name="country" placeholder="Enter a country"  className={errors.country && touched.country ? 'form-error' : ''} />
-                                                {errors.country && touched.country ?
-                                                    (<span>{errors.country}</span>)
-                                                    : null}
-                                            </div>
-                                            <div className={errors.city && touched.City ? 'form-error form-group' : 'form-group'} >
-                                                <label >city</label>
-                                                <Field id="city" name="city" placeholder="Enter a city"  className={errors.city && touched.city ? 'form-error' : ''} />
-                                                {errors.city && touched.city ?
-                                                    (<span>{errors.city}</span>)
-                                                    : null}
-                                            </div>
-
-
-                                            <div className={errors.email && touched.email ? 'form-error form-group' : 'form-group'} >
-                                                <label  >Email</label>
-                                                <Field id="email" name="email" placeholder="Enter an e-mail (abc@xyz.com)"  className={errors.email && touched.email ? 'form-error' : ''} />
-                                                {errors.email && touched.email ?
-                                                    (<span>{errors.email}</span>)
-                                                    : null}
-                                            </div>
-
-                                            <div className={errors.website && touched.website ? 'form-error form-group' : 'form-group'} >
-                                                <label  >website</label>
-                                                <Field id="website" name="website" placeholder="Enter a website (https://xyz.com)"  className={errors.website && touched.website ? 'form-error' : ''} />
-                                                {errors.website && touched.website ?
-                                                    (<span>{errors.website}</span>)
-                                                    : null}
-                                            </div>
-
+                                            <FormGroup error={errors.nameSurname} touched={touched.nameSurname} name="nameSurname" placeholder="Enter name and surname" />
+                                            <FormGroup error={errors.country} touched={touched.country} name="country" placeholder="Enter a country" />
+                                            <FormGroup error={errors.city} touched={touched.city} name="city" placeholder="Enter a city" />
+                                            <FormGroup error={errors.email} touched={touched.email} name="email" placeholder="Enter an e-mail (abc@xyz.com)" />
+                                            <FormGroup error={errors.website} touched={touched.website} name="website" placeholder="Enter a website (https://xyz.com)" />
                                             <button className={isValid ? 'btn-link' : 'btn-link-disabled'} disabled={isValid ? false : true} type="submit">Add</button>
 
                                         </Form>

@@ -6,8 +6,6 @@ import AddLink from './components/pages/AddLink'
 import Footer from './components/globals/Footer'
 function App() {
   return (
- 
-
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Main />} />
@@ -15,9 +13,6 @@ function App() {
           <Route path='/addlink' element={<AddLink />} />
         </Routes>
       </BrowserRouter>
-
- 
-
   )
 }
 

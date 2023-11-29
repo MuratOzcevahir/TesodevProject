@@ -1,9 +1,8 @@
 import React, { createRef, useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import FoundItem from './search-result-components/FoundItem';
-
 import bigData from '../../data/mock-data.json'
-import SearchInput from './search-components/SearchInput';
+import FoundItem from '../search-result-components/FoundItem';
+import SearchInput from '../search-components/SearchInput';
 function SearchResults() {
     const location = useLocation();
     const navigate = useNavigate();
@@ -41,15 +40,13 @@ function SearchResults() {
     }, [])
     useEffect(() => {
         let addPage = currentPage > 2 ? 4 : 1
-        //######## NEED FIX  IMPORTANT(dont forget)
+        //######## NEED FIX  IMPORTANT
         if (currentPage < totalItemAmount / nextSlice) {
             for (let i = 0; i <= 2; i++) {
                 nextPage.push(currentPage + addPage + i)
             }
 
         }
-
-
         if (currentPage !== 1) {
             for (let i = 1; i >= 0; i--) {
                 if ((currentPage - 1 - i) > 0)
@@ -58,8 +55,6 @@ function SearchResults() {
         }
         setpreviousPages(previousPage)
         setnextPages(nextPage)
-
-
     }, [currentPage, mappedData, totalItemAmount])
     const SetFilterStyleHandler = (value) => {
         setfilterStyle(value)
@@ -68,9 +63,9 @@ function SearchResults() {
         if (filterStyle != "") {
             setmappedData(mappedData.sort(SortDataHandler))
         }
-
     }, [filterStyle])
     const SortDataHandler = (a, b) => {
+        //data sorting options
         switch (filterStyle) {
             case "nameDESC":
                 {
@@ -101,6 +96,7 @@ function SearchResults() {
         }
     }
     const PageHandler = (set, page) => {
+        //page moves
         if (set === 'n') {
             setcurrentSlice(currentSlice + nextSlice)
             setcurrentPage(currentPage + 1);
@@ -114,36 +110,33 @@ function SearchResults() {
         }
     }
     const SearchButtonHandler = () => {
+        //data search clicked
         let searched = searchValue.current.value.toLowerCase()
-
         setsearchText(searched)
-
         setcurrentPage(1);
         setcurrentSlice(0, nextSlice);
         navigate(location.pathname, "");
 
-        settotalItemAmount(mappedData.filter((p) => { return p.nameSurname.toLowerCase().includes(searched) || p.date.toLowerCase().includes(searched) }).length);
+        settotalItemAmount(mappedData.filter((p) => {
+            return p.nameSurname.toLowerCase().includes(searched) 
+                || p.date.toLowerCase().includes(searched)
+                || p.company.toLowerCase().includes(searched)
+                || p.email.toLowerCase().includes(searched)
+                || p.website.toLowerCase().includes(searched)
+                || p.country.toLowerCase().includes(searched)
+        }).length);
     }
-
     const FilterHandler = (item) => {
-
-        //not dynamic search
-        // if (item["nameSurname"].includes(searchText) || item["date"].includes(searchText)) {
-        //     console.log(item, " found array")
-        //     filteredData.push(item);
-        // }
-
-        //Few props dont forget
 
 
         return item["nameSurname"].toLowerCase().includes(searchText)
-            || item["date"].toLowerCase().includes(searchText);
+            || item["date"].toLowerCase().includes(searchText)
+            || item["company"].toLowerCase().includes(searchText)
+            || item["email"].toLowerCase().includes(searchText)
+            || item["website"].toLowerCase().includes(searchText)
+            || item["country"].toLowerCase().includes(searchText)
 
     }
-    const NoFilter = () => {
-
-    }
-
     return (
 
         <div id='search-results-page-holder'>
@@ -153,16 +146,8 @@ function SearchResults() {
                         <Link to="/"><img src="/img/logo.webp" width="200" /></Link>
                     </div>
                     <div className='col-12 col-xl-8 '>
-                        <SearchInput SearchItems={SearchButtonHandler} inputRef={searchValue} />
-                        {/* <div className='search-holder d-column d-lg-flex justify-content-between align-items-center gap-3 h-100'>
-                            <div className='position-relative w-100 '>
-                                <div className='search-icon'>
-                                    <i className="bi bi-search"></i>
-                                </div>
-                                <input onKeyDown={e => e.key == 'Enter' ? SearchButtonHandler() : ''} ref={searchValue} className='search-input' type="text" placeholder={searchText} />
-                            </div>
-                            <button className='btn-link' onClick={SearchButtonHandler}>Search</button>
-                        </div> */}
+                        <SearchInput ph={searchText} SearchItems={SearchButtonHandler} inputRef={searchValue} />
+
                     </div>
                     <div className='col-12 col-xl-2'>
                         <div className='h-100 d-flex align-items-center justify-content-center'>
@@ -221,7 +206,7 @@ function SearchResults() {
                             }
                             <a style={{ pointerEvents: currentPage >= (totalItemAmount / nextSlice) ? "none" : '' }} onClick={() => { PageHandler('n') }}> Next</a>
 
-                            {currentPage >= Math.ceil(totalItemAmount / 5) ? '' : <a className='fs-6  text-dark' onClick={() => { PageHandler('d', Math.ceil(totalItemAmount / 5)) }}> {Math.ceil(totalItemAmount / 5)}</a>}
+                            {currentPage >= Math.ceil(totalItemAmount / nextSlice) ? '' : <a className='fs-6  text-dark' onClick={() => { PageHandler('d', Math.ceil(totalItemAmount / nextSlice)) }}> {Math.ceil(totalItemAmount / nextSlice)}</a>}
 
 
                         </div>

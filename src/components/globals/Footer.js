@@ -8,7 +8,7 @@ function Footer() {
                     <div className='col-12 col-lg-7'>
                         <div className='d-flex flex-column flex-lg-row  align-items-center justify-content-center h-100 gap-3 '>
                             <div>
-                                <img src="https://www.tesodev.com/getimg/5c9b3f3ea80e95155c456632/340" />
+                                <img src="https://picsum.photos/340/200?random=4" />
                             </div>
                             <div className='d-flex flex-column gap-5'>
                                 <div className='d-flex flex-column '>

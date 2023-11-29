@@ -1,10 +1,8 @@
 import React from 'react'
-
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from 'react-slick';
 function MainSlider() {
-
     let sliderData = [
         {
             img: 'https://picsum.photos/300/200?random=1',
@@ -27,10 +25,8 @@ function MainSlider() {
             desc: 'Sed sodales elit vel.'
         }
     ]
-
     const settings = {
         dots: false,
-        infinite: true,
         speed: 300,
         slidesToShow: 3,
         slidesToScroll: 2,
@@ -41,26 +37,21 @@ function MainSlider() {
                 settings: {
                     slidesToShow: 2,
                     slidesToScroll: 2,
-                    infinite: true,
-                    dots: true
                 }
             },
             {
                 breakpoint: 480,
                 settings: {
                     slidesToShow: 1,
-                    slidesToScroll: 1
+                    slidesToScroll: 1,
                 }
             }
         ]
     };
-
-
     return (
         <div className='slider-holder'>
             <h2>Top News</h2>
             <Slider {...settings}>
-
                 {
                     sliderData.map((item, i) => {
                         return (
@@ -73,8 +64,6 @@ function MainSlider() {
                     })
 
                 }
-
-
             </Slider>
         </div>
     );
