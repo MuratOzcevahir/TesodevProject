@@ -147,9 +147,13 @@ html {
 }
 
 #search-results-page-holder .search-result-item {
-    padding: 1rem 0;
+    padding: 1rem .5rem;
     font-size: 1.4rem;
     cursor: pointer;
+    word-break: break-word;
+    border-radius: 1rem;
+
+
 }
 
 #search-results-page-holder .search-result-item i {
@@ -168,7 +172,6 @@ html {
 
 #search-results-page-holder .search-result-item:hover {
     background-color: rgb(216, 224, 240);
-    border-radius: 1rem;
 }
 
 #search-results-page-holder .results-pagination {

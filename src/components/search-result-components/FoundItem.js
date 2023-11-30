@@ -4,7 +4,7 @@ import React from 'react'
 function FoundItem(obj) {
     const item = obj.obj;
     return (
-        <div>
+        <>
             <div className='search-result-item d-flex flex-column flex-sm-row justify-content-between align-items-start w-100'>
                 <div className='d-flex flex-sm-row flex-column align-items-start justify-conten-center'>
                     <div>
@@ -21,10 +21,8 @@ function FoundItem(obj) {
                 </div>
 
             </div>
-
-
             <hr className='w-100' />
-        </div>
+        </>
 
     )
 }

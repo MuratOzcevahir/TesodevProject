@@ -7,22 +7,22 @@ function SearchResults() {
     const location = useLocation();
     const navigate = useNavigate();
     let foundData = location.state;
-    foundData = location.state != null ? foundData.searchTextFromMain.toLowerCase() : '';
-    let searchValue = createRef();
+    foundData = location.state != null ? foundData.searchTextFromMain.toLowerCase() : ''; // get search text from state in main page
+    let searchValue = createRef(); //access to search input element's properties
     let nextPage = []
     let previousPage = []
 
 
     let filteredData = []
-    const [mappedData, setmappedData] = useState([]);
-    const [currentSlice, setcurrentSlice] = useState(0);
+    const [mappedData, setmappedData] = useState([]); // data from localstorage/json
+    const [currentSlice, setcurrentSlice] = useState(0); //slice the data list by the value
     const [nextSlice, setnextSlice] = useState(5)
-    const [currentPage, setcurrentPage] = useState(1)
-    const [previousPages, setpreviousPages] = useState([])
-    const [nextPages, setnextPages] = useState([])
-    const [totalItemAmount, settotalItemAmount] = useState(0)
-    const [searchText, setsearchText] = useState(foundData);
-    const [filterStyle, setfilterStyle] = useState("");
+    const [currentPage, setcurrentPage] = useState(1) // active page
+    const [previousPages, setpreviousPages] = useState([]) // previous page list for user
+    const [nextPages, setnextPages] = useState([])// next page list for user
+    const [totalItemAmount, settotalItemAmount] = useState(0) // found items by searched or pure data length
+    const [searchText, setsearchText] = useState(foundData); // searched text by user
+    const [filterStyle, setfilterStyle] = useState(""); // sorted data rule
     useEffect(() => {
         if (localStorage.getItem("items") == null) localStorage.setItem("items", JSON.stringify(bigData))
 
@@ -39,13 +39,12 @@ function SearchResults() {
         settotalItemAmount(location.state != null ? location.state.itemAmount : foundItems.length)
     }, [])
     useEffect(() => {
+        //pagination by some {currentPage mappedData totalItemAmount} changes
         let addPage = currentPage > 2 ? 4 : 1
-        //######## NEED FIX  IMPORTANT
         if (currentPage < totalItemAmount / nextSlice) {
             for (let i = 0; i <= 2; i++) {
                 nextPage.push(currentPage + addPage + i)
             }
-
         }
         if (currentPage !== 1) {
             for (let i = 1; i >= 0; i--) {
@@ -56,16 +55,28 @@ function SearchResults() {
         setpreviousPages(previousPage)
         setnextPages(nextPage)
     }, [currentPage, mappedData, totalItemAmount])
+
+    /** sets the variable for sorting array 
+     * @param value the rule to sort an array list
+    */
     const SetFilterStyleHandler = (value) => {
         setfilterStyle(value)
     }
     useEffect(() => {
+        // sorts the data default by "" when page loaded in the first time or when sorting rule changed
         if (filterStyle != "") {
             setmappedData(mappedData.sort(SortDataHandler))
         }
     }, [filterStyle])
+
+    /** Sorting the data by rules
+    * @param a property of obj
+    * @param b property of obj
+    * 
+    * returns sorted 
+    */
     const SortDataHandler = (a, b) => {
-        //data sorting options
+        //data sorting rules
         switch (filterStyle) {
             case "nameDESC":
                 {
@@ -95,16 +106,21 @@ function SearchResults() {
             }
         }
     }
+    /** Sets the current page by user choices
+     * 
+     * @param {string} set the type of choice
+     * @param {number} page exact page number
+     */
     const PageHandler = (set, page) => {
         //page moves
-        if (set === 'n') {
+        if (set === 'n') {//sets next page as current page
             setcurrentSlice(currentSlice + nextSlice)
             setcurrentPage(currentPage + 1);
-        } else if (set === 'p') {
+        } else if (set === 'p') { //sets previous page as current page
             setcurrentSlice(currentSlice - nextSlice)
             setcurrentPage(currentPage - 1)
 
-        } else if (set === 'd') {
+        } else if (set === 'd') { // sets current page
             setcurrentPage(page)
             setcurrentSlice((page * nextSlice) - nextSlice)
         }
@@ -115,30 +131,28 @@ function SearchResults() {
         setsearchText(searched)
         setcurrentPage(1);
         setcurrentSlice(0, nextSlice);
-        navigate(location.pathname, "");
-
+        navigate(location.pathname, "");//resets the location.state
+        
         settotalItemAmount(mappedData.filter((p) => {
-            return p.nameSurname.toLowerCase().includes(searched) 
+            return p.nameSurname.toLowerCase().includes(searched)
                 || p.date.toLowerCase().includes(searched)
                 || p.company.toLowerCase().includes(searched)
                 || p.email.toLowerCase().includes(searched)
                 || p.website.toLowerCase().includes(searched)
                 || p.country.toLowerCase().includes(searched)
-        }).length);
+        }).length); //returns the length of filtered data
     }
     const FilterHandler = (item) => {
-
-
+        //returns an item if searchText includes
         return item["nameSurname"].toLowerCase().includes(searchText)
             || item["date"].toLowerCase().includes(searchText)
             || item["company"].toLowerCase().includes(searchText)
             || item["email"].toLowerCase().includes(searchText)
             || item["website"].toLowerCase().includes(searchText)
             || item["country"].toLowerCase().includes(searchText)
-
+            
     }
     return (
-
         <div id='search-results-page-holder'>
             <div className='container-fluid p-5 '>
                 <div className='row row-gap-5 m-0 p-0'>
@@ -161,10 +175,9 @@ function SearchResults() {
                             <span className="material-symbols-outlined">
                                 swap_vert
                             </span>
-
                             Order by</span>
-
                         <div className='hidden-filter-menu'>
+                            {/* sets sort rule */}
                             <span onClick={() => { SetFilterStyleHandler("nameASC") }}> Name Ascending</span>
                             <span onClick={() => { SetFilterStyleHandler("nameDESC") }}>Name Descending</span>
                             <span onClick={() => { SetFilterStyleHandler("yearASC") }}>Year Ascending</span>
@@ -185,13 +198,13 @@ function SearchResults() {
                                     .map((item, i) =>
                                         <FoundItem key={i} obj={item} />
                                     )
-
+                                //final show mapped
                             }
                         </div>
+                        {/* pagination */}
                         <div className={totalItemAmount > 3 ? `results-pagination flex-sm-row` : `d-none`} >
                             {currentPage > 4 ? <a className='fs-6 text-dark' onClick={() => { PageHandler('d', 1) }}> {1}</a> : null}
                             <a style={{ pointerEvents: currentPage < 2 ? "none" : '' }} onClick={() => { PageHandler('p') }}> Previous</a>
-
                             {
                                 previousPages.map((p, i) => {
                                     return <a key={i} onClick={() => { PageHandler('d', p) }}> {p}</a>
@@ -207,13 +220,10 @@ function SearchResults() {
                             <a style={{ pointerEvents: currentPage >= (totalItemAmount / nextSlice) ? "none" : '' }} onClick={() => { PageHandler('n') }}> Next</a>
 
                             {currentPage >= Math.ceil(totalItemAmount / nextSlice) ? '' : <a className='fs-6  text-dark' onClick={() => { PageHandler('d', Math.ceil(totalItemAmount / nextSlice)) }}> {Math.ceil(totalItemAmount / nextSlice)}</a>}
-
-
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     )
 }

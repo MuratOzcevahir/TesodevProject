@@ -7,8 +7,17 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { ToastContainer, toast } from 'react-toastify';
 import FormGroup from '../add-link-components/FormGroup';
+import axios from 'axios';
 
-
+//default value of new object
+let defaultData = {
+    nameSurname: '',
+    country: '',
+    city: '',
+    email: '',
+    website: ''
+}
+// creating validation schema by using yup
 const NewRecordSchema = Yup.object().shape({
     nameSurname: Yup.string()
         .matches(/^[a-zA-ZğüşöçıİĞÜŞÖÇ ]*$/, "Number is not allowed!")
@@ -32,19 +41,22 @@ const NewRecordSchema = Yup.object().shape({
         .matches(/^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/gm, 'URL is not valid').required('Required')
 
 });
-
+/** If pass the validation submit new data to localstorage
+ * 
+ * @param  values new object values
+ */
 const submitHandler = (values) => {
 
     const foundItemsLocalStorage = JSON.parse((localStorage.getItem('items')));
     const foundCols = foundItemsLocalStorage.cols;
     const foundItems = foundItemsLocalStorage.data;
-
+    //cretes the new obj list from col and data array
     const itemList = foundItems.map((item, i) => {
         let obj = {};
         foundCols.forEach((col, coli) => obj[col] = item[coli]);
         return obj;
     })
-    const newId = Math.max(...itemList.map(o => o.id)) + 1;
+    const newId = Math.max(...itemList.map(o => o.id)) + 1;//creating new ID for new record
     let newRecord = [
         newId,
         values.nameSurname,
@@ -57,7 +69,7 @@ const submitHandler = (values) => {
         new Date().toLocaleDateString("en")
     ];
     foundItemsLocalStorage.data.push(newRecord);
-
+    //puts data in localstorage
     localStorage.setItem("items", JSON.stringify(foundItemsLocalStorage));
     toast.success('Data added', {
         position: "top-center",
@@ -69,6 +81,7 @@ const submitHandler = (values) => {
         progress: undefined,
         theme: "colored",
     })
+    //clears the inputs after data save
     const inputs = document.querySelectorAll("input");
     inputs.forEach(inp =>
         inp.value = '')
@@ -77,13 +90,9 @@ const submitHandler = (values) => {
 function AddLink() {
 
     useEffect(() => {
-
-
         if (localStorage.getItem("items") != null) return
-
         localStorage.setItem("items", JSON.stringify(bigData))
-        // console.log("çalıştı")
-
+        // ULVIS.NET 403 ERROR!
         // const options = {
         //     method: 'GET',
         //     url: 'http://ulvis.net/API/write/get',
@@ -104,10 +113,13 @@ function AddLink() {
         //     console.log(er)
 
         // });
+        // axios.post("https://ulvis.net/API/write/post/", JSON.stringify({
+        //     url: "https://www.youtube.com/watch?v="
+        // })).then((res) => { console.log(res, " res from req") }).catch((er) => {
+        //     console.log(er)
+        // })
 
     }, [])
-
-
     return (
         <div id='add-link-page-holder'>
             <div className='container-fluid p-5 pb-0'>
@@ -125,13 +137,7 @@ function AddLink() {
                             <div className='mt-lg-5'>
                                 <Formik
                                     isInitialValid={false}
-                                    initialValues={{
-                                        nameSurname: '',
-                                        country: '',
-                                        city: '',
-                                        email: '',
-                                        website: ''
-                                    }}
+                                    initialValues={defaultData}
                                     validationSchema={NewRecordSchema}
                                     onSubmit={(value) => { submitHandler(value) }}
                                 >
